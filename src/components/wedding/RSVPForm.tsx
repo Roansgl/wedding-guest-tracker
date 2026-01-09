@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Ornament } from "./Ornament";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -20,15 +19,12 @@ interface RSVPFormProps {
   onSuccess: () => void;
 }
 
-type RsvpStatus = "attending" | "not_attending" | "maybe";
-type MealPreference = "standard" | "vegetarian" | "vegan" | "gluten_free" | "other";
+type RsvpStatus = "attending" | "not_attending";
 
 export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
   const [status, setStatus] = useState<RsvpStatus>("attending");
-  const [mealPreference, setMealPreference] = useState<MealPreference>("standard");
   const [dietaryNotes, setDietaryNotes] = useState("");
   const [plusOneName, setPlusOneName] = useState("");
-  const [plusOneMeal, setPlusOneMeal] = useState<MealPreference>("standard");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -42,10 +38,8 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
         .upsert({
           guest_id: guest.id,
           status,
-          meal_preference: status === "attending" ? mealPreference : null,
           dietary_notes: status === "attending" ? dietaryNotes : null,
           plus_one_name: status === "attending" && guest.plus_one_allowed ? plusOneName : null,
-          plus_one_meal_preference: status === "attending" && guest.plus_one_allowed && plusOneName ? plusOneMeal : null,
           message,
           responded_at: new Date().toISOString(),
         }, {
@@ -89,32 +83,12 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
               <RadioGroupItem value="not_attending" />
               <span className="font-display text-lg">Regretfully Declines</span>
             </label>
-            <label className="flex items-center space-x-3 p-4 rounded-lg border border-border bg-card hover:bg-accent/30 transition-colors cursor-pointer">
-              <RadioGroupItem value="maybe" />
-              <span className="font-display text-lg">Not Sure Yet</span>
-            </label>
           </RadioGroup>
         </div>
 
         {status === "attending" && (
           <>
             <div className="space-y-3 animate-fade-in">
-              <Label className="text-sm font-medium text-foreground">Meal Preference</Label>
-              <Select value={mealPreference} onValueChange={(value) => setMealPreference(value as MealPreference)}>
-                <SelectTrigger className="bg-card">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="standard">Standard</SelectItem>
-                  <SelectItem value="vegetarian">Vegetarian</SelectItem>
-                  <SelectItem value="vegan">Vegan</SelectItem>
-                  <SelectItem value="gluten_free">Gluten Free</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-3 animate-fade-in animate-delay-100">
               <Label className="text-sm font-medium text-foreground">Dietary Restrictions or Allergies</Label>
               <Input
                 value={dietaryNotes}
@@ -125,7 +99,7 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
             </div>
 
             {guest.plus_one_allowed && (
-              <div className="space-y-4 p-4 rounded-lg bg-accent/20 animate-fade-in animate-delay-200">
+              <div className="space-y-4 p-4 rounded-lg bg-accent/20 animate-fade-in animate-delay-100">
                 <p className="text-sm font-medium text-foreground">You're welcome to bring a guest!</p>
                 <div className="space-y-3">
                   <Label className="text-sm text-muted-foreground">Guest Name</Label>
@@ -136,23 +110,6 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
                     className="bg-card"
                   />
                 </div>
-                {plusOneName && (
-                  <div className="space-y-3">
-                    <Label className="text-sm text-muted-foreground">Guest's Meal Preference</Label>
-                    <Select value={plusOneMeal} onValueChange={(value) => setPlusOneMeal(value as MealPreference)}>
-                      <SelectTrigger className="bg-card">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="standard">Standard</SelectItem>
-                        <SelectItem value="vegetarian">Vegetarian</SelectItem>
-                        <SelectItem value="vegan">Vegan</SelectItem>
-                        <SelectItem value="gluten_free">Gluten Free</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
               </div>
             )}
           </>
