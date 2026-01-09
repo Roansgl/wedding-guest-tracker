@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,111 +6,114 @@
 
 @layer base {
   :root {
-    /* Elegant wedding palette - cream, blush, gold */
-    --background: 40 33% 98%;
-    --foreground: 30 10% 20%;
+    /* Victorian Vintage palette - burgundy, gold, cream, forest green */
+    --background: 35 30% 95%;
+    --foreground: 25 30% 15%;
 
-    --card: 40 40% 97%;
-    --card-foreground: 30 10% 20%;
+    --card: 35 35% 93%;
+    --card-foreground: 25 30% 15%;
 
-    --popover: 40 40% 97%;
-    --popover-foreground: 30 10% 20%;
+    --popover: 35 35% 93%;
+    --popover-foreground: 25 30% 15%;
 
-    /* Gold accent as primary */
-    --primary: 38 55% 45%;
-    --primary-foreground: 40 33% 98%;
+    /* Deep burgundy as primary */
+    --primary: 345 45% 35%;
+    --primary-foreground: 35 30% 95%;
 
-    /* Soft blush secondary */
-    --secondary: 10 30% 93%;
-    --secondary-foreground: 30 10% 25%;
+    /* Antique cream secondary */
+    --secondary: 40 35% 88%;
+    --secondary-foreground: 25 30% 20%;
 
-    --muted: 30 15% 92%;
-    --muted-foreground: 30 10% 45%;
+    --muted: 35 20% 88%;
+    --muted-foreground: 25 15% 40%;
 
-    /* Rose accent */
-    --accent: 350 35% 88%;
-    --accent-foreground: 350 30% 30%;
+    /* Forest green accent */
+    --accent: 150 25% 30%;
+    --accent-foreground: 35 30% 95%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 65% 45%;
+    --destructive-foreground: 35 30% 95%;
 
-    --border: 30 20% 88%;
-    --input: 30 20% 88%;
-    --ring: 38 55% 45%;
+    --border: 35 25% 80%;
+    --input: 35 25% 85%;
+    --ring: 38 60% 45%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
 
-    /* Custom wedding tokens */
-    --gold: 38 55% 45%;
-    --gold-light: 40 50% 75%;
-    --blush: 10 40% 92%;
-    --blush-dark: 10 25% 75%;
-    --cream: 40 33% 98%;
-    --cream-dark: 40 25% 92%;
-    --sage: 120 15% 75%;
-    --rose: 350 35% 70%;
+    /* Custom Victorian tokens */
+    --gold: 38 70% 45%;
+    --gold-light: 40 60% 65%;
+    --burgundy: 345 45% 35%;
+    --burgundy-light: 345 35% 50%;
+    --cream: 35 30% 95%;
+    --cream-dark: 35 25% 85%;
+    --forest: 150 25% 30%;
+    --forest-light: 150 20% 45%;
+    --sepia: 30 35% 75%;
+    --parchment: 40 40% 92%;
 
     /* Typography */
-    --font-display: 'Cormorant Garamond', serif;
-    --font-body: 'Montserrat', sans-serif;
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Crimson Text', serif;
 
     /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(38 55% 50%), hsl(40 60% 65%));
-    --gradient-blush: linear-gradient(180deg, hsl(10 40% 95%), hsl(40 33% 98%));
-    --gradient-hero: linear-gradient(180deg, hsl(40 33% 98%) 0%, hsl(10 40% 96%) 50%, hsl(40 33% 98%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(38 70% 45%), hsl(40 65% 55%));
+    --gradient-burgundy: linear-gradient(135deg, hsl(345 45% 35%), hsl(345 40% 45%));
+    --gradient-hero: linear-gradient(180deg, hsl(35 30% 95%) 0%, hsl(40 40% 92%) 50%, hsl(35 30% 95%) 100%);
+    --gradient-parchment: linear-gradient(180deg, hsl(40 40% 92%), hsl(35 30% 95%));
 
     /* Shadows */
-    --shadow-soft: 0 4px 20px -5px hsl(30 20% 70% / 0.3);
-    --shadow-elegant: 0 10px 40px -10px hsl(38 55% 45% / 0.15);
-    --shadow-card: 0 2px 15px -3px hsl(30 20% 60% / 0.15);
+    --shadow-soft: 0 4px 20px -5px hsl(25 30% 40% / 0.2);
+    --shadow-elegant: 0 10px 40px -10px hsl(345 45% 35% / 0.2);
+    --shadow-card: 0 2px 15px -3px hsl(25 20% 50% / 0.15);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 35 30% 95%;
+    --sidebar-foreground: 25 30% 15%;
+    --sidebar-primary: 345 45% 35%;
+    --sidebar-primary-foreground: 35 30% 95%;
+    --sidebar-accent: 40 35% 88%;
+    --sidebar-accent-foreground: 25 30% 15%;
+    --sidebar-border: 35 25% 80%;
+    --sidebar-ring: 38 60% 45%;
   }
 
   .dark {
-    --background: 30 15% 10%;
-    --foreground: 40 20% 90%;
+    --background: 25 25% 8%;
+    --foreground: 35 25% 90%;
 
-    --card: 30 12% 14%;
-    --card-foreground: 40 20% 90%;
+    --card: 25 20% 12%;
+    --card-foreground: 35 25% 90%;
 
-    --popover: 30 12% 14%;
-    --popover-foreground: 40 20% 90%;
+    --popover: 25 20% 12%;
+    --popover-foreground: 35 25% 90%;
 
-    --primary: 40 55% 55%;
-    --primary-foreground: 30 15% 10%;
+    --primary: 345 40% 50%;
+    --primary-foreground: 25 25% 8%;
 
-    --secondary: 30 10% 20%;
-    --secondary-foreground: 40 20% 85%;
+    --secondary: 25 15% 18%;
+    --secondary-foreground: 35 25% 85%;
 
-    --muted: 30 10% 18%;
-    --muted-foreground: 30 15% 60%;
+    --muted: 25 15% 16%;
+    --muted-foreground: 35 15% 55%;
 
-    --accent: 350 25% 25%;
-    --accent-foreground: 350 30% 85%;
+    --accent: 150 20% 35%;
+    --accent-foreground: 35 25% 90%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 55% 40%;
+    --destructive-foreground: 35 25% 90%;
 
-    --border: 30 10% 22%;
-    --input: 30 10% 22%;
-    --ring: 40 55% 55%;
+    --border: 25 15% 20%;
+    --input: 25 15% 20%;
+    --ring: 38 55% 50%;
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 25 25% 8%;
+    --sidebar-foreground: 35 25% 90%;
+    --sidebar-primary: 345 40% 50%;
+    --sidebar-primary-foreground: 25 25% 8%;
+    --sidebar-accent: 25 15% 16%;
+    --sidebar-accent-foreground: 35 25% 90%;
+    --sidebar-border: 25 15% 20%;
+    --sidebar-ring: 38 55% 50%;
   }
 }
 
@@ -146,20 +149,44 @@
     background-color: hsl(var(--gold));
   }
 
-  .bg-blush {
-    background-color: hsl(var(--blush));
+  .text-burgundy {
+    color: hsl(var(--burgundy));
+  }
+
+  .bg-burgundy {
+    background-color: hsl(var(--burgundy));
   }
 
   .bg-cream {
     background-color: hsl(var(--cream));
   }
 
+  .bg-parchment {
+    background-color: hsl(var(--parchment));
+  }
+
+  .text-forest {
+    color: hsl(var(--forest));
+  }
+
+  .bg-forest {
+    background-color: hsl(var(--forest));
+  }
+
   .gradient-gold {
     background: var(--gradient-gold);
   }
 
+  .gradient-burgundy {
+    background: var(--gradient-burgundy);
+  }
+
   .gradient-hero {
     background: var(--gradient-hero);
+  }
+
+  .gradient-parchment {
+    background: var(--gradient-parchment);
   }
 
   .shadow-soft {
@@ -174,17 +201,17 @@
     box-shadow: var(--shadow-card);
   }
 
-  /* Decorative flourish */
+  /* Victorian decorative flourish */
   .flourish {
     position: relative;
   }
 
   .flourish::before,
   .flourish::after {
-    content: '✦';
+    content: '❧';
     color: hsl(var(--gold));
-    opacity: 0.6;
-    font-size: 0.75em;
+    opacity: 0.7;
+    font-size: 1em;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -192,13 +219,14 @@
 
   .flourish::before {
     left: -2em;
+    transform: translateY(-50%) scaleX(-1);
   }
 
   .flourish::after {
     right: -2em;
   }
 
-  /* Elegant divider */
+  /* Ornate Victorian divider */
   .divider-ornate {
     display: flex;
     align-items: center;
@@ -211,7 +239,28 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, hsl(var(--gold) / 0.4), transparent);
+    background: linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), transparent);
+  }
+
+  /* Victorian border frame */
+  .border-victorian {
+    border: 2px solid hsl(var(--gold) / 0.4);
+    position: relative;
+  }
+
+  .border-victorian::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid hsl(var(--gold) / 0.2);
+    pointer-events: none;
+  }
+
+  /* Aged paper texture effect */
+  .texture-paper {
+    background-image: 
+      radial-gradient(ellipse at 50% 0%, hsl(40 40% 95% / 0.8) 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 100%, hsl(35 30% 85% / 0.4) 0%, transparent 50%);
   }
 }
 

@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Cormorant Garamond', 'serif'],
-        body: ['Montserrat', 'sans-serif'],
+        display: ['Playfair Display', 'serif'],
+        body: ['Crimson Text', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -63,12 +63,14 @@ export default {
         },
         gold: "hsl(var(--gold))",
         "gold-light": "hsl(var(--gold-light))",
-        blush: "hsl(var(--blush))",
-        "blush-dark": "hsl(var(--blush-dark))",
+        burgundy: "hsl(var(--burgundy))",
+        "burgundy-light": "hsl(var(--burgundy-light))",
         cream: "hsl(var(--cream))",
         "cream-dark": "hsl(var(--cream-dark))",
-        sage: "hsl(var(--sage))",
-        rose: "hsl(var(--rose))",
+        forest: "hsl(var(--forest))",
+        "forest-light": "hsl(var(--forest-light))",
+        sepia: "hsl(var(--sepia))",
+        parchment: "hsl(var(--parchment))",
       },
       borderRadius: {
         lg: "var(--radius)",
