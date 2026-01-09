@@ -20,13 +20,31 @@ const RSVP = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [watermarkUrl, setWatermarkUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const code = searchParams.get("code");
     if (code) {
       lookupGuest(code);
     }
+    fetchWatermark();
   }, [searchParams]);
+
+  const fetchWatermark = async () => {
+    try {
+      const { data } = await supabase
+        .from("wedding_settings")
+        .select("value")
+        .eq("key", "watermark_url")
+        .maybeSingle();
+      
+      if (data?.value) {
+        setWatermarkUrl(data.value);
+      }
+    } catch (error) {
+      console.error("Error fetching watermark:", error);
+    }
+  };
 
   const lookupGuest = async (code: string) => {
     setIsLoading(true);
@@ -89,9 +107,18 @@ const RSVP = () => {
         <div className="relative z-10 max-w-2xl mx-auto space-y-6 animate-fade-in-up">
           <p className="text-gold uppercase tracking-[0.3em] text-sm font-body">You're Invited</p>
           
-          <h1 className="font-display text-5xl md:text-7xl text-foreground leading-tight">
-            Roan & Lariney
-          </h1>
+          <div className="relative">
+            {watermarkUrl && (
+              <img 
+                src={watermarkUrl} 
+                alt="" 
+                className="absolute inset-0 w-full h-full object-contain opacity-15 pointer-events-none"
+              />
+            )}
+            <h1 className="font-display text-5xl md:text-7xl text-foreground leading-tight relative z-10">
+              Roan & Lariney
+            </h1>
+          </div>
           
           <Ornament variant="floral" className="py-4" />
           

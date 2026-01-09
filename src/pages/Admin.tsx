@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -11,11 +11,12 @@ import {
   Users, 
   CheckCircle, 
   XCircle, 
-  HelpCircle,
   Clock,
   Copy,
   Trash2,
-  Search
+  Search,
+  Upload,
+  Image
 } from "lucide-react";
 import {
   Table,
@@ -53,6 +54,9 @@ const Admin = () => {
   const [newGuestPlusOne, setNewGuestPlusOne] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [watermarkUrl, setWatermarkUrl] = useState<string | null>(null);
+  const [isUploadingWatermark, setIsUploadingWatermark] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const filteredGuests = guests.filter((guest) =>
     guest.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -72,11 +76,28 @@ const Admin = () => {
         navigate("/admin/login");
       } else {
         fetchGuests();
+        fetchWatermark();
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  const fetchWatermark = async () => {
+    try {
+      const { data } = await supabase
+        .from("wedding_settings")
+        .select("value")
+        .eq("key", "watermark_url")
+        .maybeSingle();
+      
+      if (data?.value) {
+        setWatermarkUrl(data.value);
+      }
+    } catch (error) {
+      console.error("Error fetching watermark:", error);
+    }
+  };
 
   const fetchGuests = async () => {
     try {
@@ -154,6 +175,52 @@ const Admin = () => {
     }
   };
 
+  const handleWatermarkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file");
+      return;
+    }
+
+    setIsUploadingWatermark(true);
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `watermark.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("watermarks")
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage
+        .from("watermarks")
+        .getPublicUrl(fileName);
+
+      const publicUrl = urlData.publicUrl;
+
+      // Save to settings
+      const { error: settingsError } = await supabase
+        .from("wedding_settings")
+        .upsert({
+          key: "watermark_url",
+          value: publicUrl,
+        }, { onConflict: "key" });
+
+      if (settingsError) throw settingsError;
+
+      setWatermarkUrl(publicUrl);
+      toast.success("Watermark uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading watermark:", error);
+      toast.error("Failed to upload watermark");
+    } finally {
+      setIsUploadingWatermark(false);
+    }
+  };
+
   const copyInviteLink = (inviteCode: string) => {
     const link = `${window.location.origin}/rsvp?code=${inviteCode}`;
     navigator.clipboard.writeText(link);
@@ -166,8 +233,6 @@ const Admin = () => {
         return <CheckCircle className="w-5 h-5 text-green-600" />;
       case "not_attending":
         return <XCircle className="w-5 h-5 text-red-500" />;
-      case "maybe":
-        return <HelpCircle className="w-5 h-5 text-amber-500" />;
       default:
         return <Clock className="w-5 h-5 text-muted-foreground" />;
     }
@@ -179,8 +244,6 @@ const Admin = () => {
         return "Attending";
       case "not_attending":
         return "Not Attending";
-      case "maybe":
-        return "Maybe";
       default:
         return "Pending";
     }
@@ -210,6 +273,53 @@ const Admin = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 space-y-8">
+        {/* Watermark Upload */}
+        <div className="bg-card rounded-xl p-6 shadow-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-display text-xl text-foreground">Invite Watermark</h2>
+              <p className="text-sm text-muted-foreground">Upload an image to display behind your names on invites</p>
+            </div>
+            <div className="flex items-center gap-4">
+              {watermarkUrl && (
+                <div className="w-16 h-16 rounded-lg border border-border overflow-hidden bg-muted">
+                  <img 
+                    src={watermarkUrl} 
+                    alt="Current watermark" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleWatermarkUpload}
+                accept="image/*"
+                className="hidden"
+              />
+              <Button
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploadingWatermark}
+              >
+                {isUploadingWatermark ? (
+                  "Uploading..."
+                ) : watermarkUrl ? (
+                  <>
+                    <Image className="w-4 h-4 mr-2" />
+                    Change Image
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Image
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-card rounded-xl p-6 shadow-card">
@@ -280,57 +390,57 @@ const Admin = () => {
                 />
               </div>
             
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger asChild>
-                <Button variant="gold">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Guest
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="font-display text-2xl">Add New Guest</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleAddGuest} className="space-y-4 mt-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Guest Name *</Label>
-                    <Input
-                      id="name"
-                      value={newGuestName}
-                      onChange={(e) => setNewGuestName(e.target.value)}
-                      placeholder="Full name"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email (Optional)</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={newGuestEmail}
-                      onChange={(e) => setNewGuestEmail(e.target.value)}
-                      placeholder="email@example.com"
-                    />
-                  </div>
-                  <div className="flex items-center justify-between py-2">
-                    <Label htmlFor="plusOne">Allow Plus One</Label>
-                    <Switch
-                      id="plusOne"
-                      checked={newGuestPlusOne}
-                      onCheckedChange={setNewGuestPlusOne}
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    variant="gold"
-                    className="w-full"
-                    disabled={isAddingGuest}
-                  >
-                    {isAddingGuest ? "Adding..." : "Add Guest"}
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="gold">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Guest
                   </Button>
-                </form>
-              </DialogContent>
-            </Dialog>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="font-display text-2xl">Add New Guest</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleAddGuest} className="space-y-4 mt-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Guest Name *</Label>
+                      <Input
+                        id="name"
+                        value={newGuestName}
+                        onChange={(e) => setNewGuestName(e.target.value)}
+                        placeholder="Full name"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email (Optional)</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={newGuestEmail}
+                        onChange={(e) => setNewGuestEmail(e.target.value)}
+                        placeholder="email@example.com"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between py-2">
+                      <Label htmlFor="plusOne">Allow Plus One</Label>
+                      <Switch
+                        id="plusOne"
+                        checked={newGuestPlusOne}
+                        onCheckedChange={setNewGuestPlusOne}
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      variant="gold"
+                      className="w-full"
+                      disabled={isAddingGuest}
+                    >
+                      {isAddingGuest ? "Adding..." : "Add Guest"}
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
 
@@ -350,7 +460,6 @@ const Admin = () => {
                   <TableHead>Guest Name</TableHead>
                   <TableHead>Invite Code</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Meal</TableHead>
                   <TableHead>Plus One</TableHead>
                   <TableHead>Message</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
@@ -379,18 +488,8 @@ const Admin = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm capitalize">
-                        {guest.rsvps?.meal_preference?.replace("_", " ") || "—"}
-                      </span>
-                    </TableCell>
-                    <TableCell>
                       {guest.rsvps?.plus_one_name ? (
-                        <div>
-                          <p className="text-sm">{guest.rsvps.plus_one_name}</p>
-                          <p className="text-xs text-muted-foreground capitalize">
-                            {guest.rsvps.plus_one_meal_preference?.replace("_", " ")}
-                          </p>
-                        </div>
+                        <p className="text-sm">{guest.rsvps.plus_one_name}</p>
                       ) : guest.plus_one_allowed ? (
                         <span className="text-sm text-muted-foreground">Allowed</span>
                       ) : (
