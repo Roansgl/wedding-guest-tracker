@@ -14,7 +14,8 @@ import {
   HelpCircle,
   Clock,
   Copy,
-  Trash2
+  Trash2,
+  Search
 } from "lucide-react";
 import {
   Table,
@@ -51,6 +52,11 @@ const Admin = () => {
   const [newGuestEmail, setNewGuestEmail] = useState("");
   const [newGuestPlusOne, setNewGuestPlusOne] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredGuests = guests.filter((guest) =>
+    guest.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -257,11 +263,22 @@ const Admin = () => {
 
         {/* Guest List */}
         <div className="bg-card rounded-xl shadow-card overflow-hidden">
-          <div className="p-6 border-b border-border flex items-center justify-between">
+          <div className="p-6 border-b border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h2 className="font-display text-xl text-foreground">Guest List</h2>
               <p className="text-sm text-muted-foreground">Manage invitations and track responses</p>
             </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by name..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 w-64"
+                />
+              </div>
             
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
@@ -314,6 +331,7 @@ const Admin = () => {
                 </form>
               </DialogContent>
             </Dialog>
+            </div>
           </div>
 
           {isLoading ? (
@@ -330,6 +348,7 @@ const Admin = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Guest Name</TableHead>
+                  <TableHead>Invite Code</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Meal</TableHead>
                   <TableHead>Plus One</TableHead>
@@ -338,7 +357,7 @@ const Admin = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {guests.map((guest) => (
+                {filteredGuests.map((guest) => (
                   <TableRow key={guest.id}>
                     <TableCell>
                       <div>
@@ -347,6 +366,11 @@ const Admin = () => {
                           <p className="text-sm text-muted-foreground">{guest.email}</p>
                         )}
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <code className="text-sm bg-muted px-2 py-1 rounded font-mono">
+                        {guest.invite_code}
+                      </code>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
