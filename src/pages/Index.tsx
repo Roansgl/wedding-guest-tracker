@@ -21,7 +21,7 @@ const Index = () => {
               Wedding Invitation
             </p>
             <h1 className="font-display text-6xl md:text-8xl text-foreground leading-tight">
-              Sarah & James
+              Roan & Lariney
             </h1>
           </div>
           

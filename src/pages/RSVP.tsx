@@ -90,7 +90,7 @@ const RSVP = () => {
           <p className="text-gold uppercase tracking-[0.3em] text-sm font-body">You're Invited</p>
           
           <h1 className="font-display text-5xl md:text-7xl text-foreground leading-tight">
-            Sarah & James
+            Roan & Lariney
           </h1>
           
           <Ornament variant="floral" className="py-4" />
