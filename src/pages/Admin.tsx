@@ -201,13 +201,26 @@ const Admin = () => {
 
       const publicUrl = urlData.publicUrl;
 
-      // Save to settings
-      const { error: settingsError } = await supabase
+      // Save to settings - first try to update, if no rows affected then insert
+      const { data: existingData } = await supabase
         .from("wedding_settings")
-        .upsert({
-          key: "watermark_url",
-          value: publicUrl,
-        }, { onConflict: "key" });
+        .select("id")
+        .eq("key", "watermark_url")
+        .maybeSingle();
+
+      let settingsError;
+      if (existingData) {
+        const { error } = await supabase
+          .from("wedding_settings")
+          .update({ value: publicUrl, updated_at: new Date().toISOString() })
+          .eq("key", "watermark_url");
+        settingsError = error;
+      } else {
+        const { error } = await supabase
+          .from("wedding_settings")
+          .insert({ key: "watermark_url", value: publicUrl });
+        settingsError = error;
+      }
 
       if (settingsError) throw settingsError;
 
