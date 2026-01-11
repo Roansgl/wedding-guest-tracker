@@ -136,7 +136,7 @@ const RSVP = () => {
               <Calendar className="w-5 h-5 text-burgundy" />
             </div>
             <h3 className="font-display text-xl text-foreground italic">Date</h3>
-            <p className="text-muted-foreground font-body">Saturday, June 15, 2025</p>
+            <p className="text-muted-foreground font-body">Friday, August 1, 2025</p>
           </div>
           
           <div className="space-y-3 animate-fade-in-up animate-delay-200">
@@ -144,7 +144,7 @@ const RSVP = () => {
               <Clock className="w-5 h-5 text-burgundy" />
             </div>
             <h3 className="font-display text-xl text-foreground italic">Time</h3>
-            <p className="text-muted-foreground font-body">Ceremony at 4:00 PM</p>
+            <p className="text-muted-foreground font-body">Ceremony at 3:00 PM</p>
           </div>
           
           <div className="space-y-3 animate-fade-in-up animate-delay-300">
@@ -152,7 +152,7 @@ const RSVP = () => {
               <MapPin className="w-5 h-5 text-burgundy" />
             </div>
             <h3 className="font-display text-xl text-foreground italic">Location</h3>
-            <p className="text-muted-foreground font-body">The Grand Estate<br />123 Garden Lane</p>
+            <a href="https://maps.app.goo.gl/1GAG8P298AB3p9586" target="_blank" rel="noopener noreferrer" className="text-muted-foreground font-body hover:text-burgundy transition-colors underline underline-offset-2">Dstasie Kirkwood</a>
           </div>
         </div>
       </section>
