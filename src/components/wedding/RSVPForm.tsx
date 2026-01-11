@@ -48,11 +48,11 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
 
       if (error) throw error;
 
-      toast.success("Thank you for your response!");
+      toast.success("Dankie vir u antwoord!");
       onSuccess();
     } catch (error) {
       console.error("RSVP error:", error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Iets het verkeerd gegaan. Probeer asseblief weer.");
     } finally {
       setIsSubmitting(false);
     }
@@ -61,15 +61,15 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       <div className="text-center">
-        <h3 className="font-display text-2xl text-foreground mb-2">Dear {guest.name}</h3>
-        <p className="text-muted-foreground text-sm">Please let us know if you can join us</p>
+        <h3 className="font-display text-2xl text-foreground mb-2">Liewe {guest.name}</h3>
+        <p className="text-muted-foreground text-sm">Laat weet ons asseblief of u by ons kan aansluit</p>
       </div>
 
       <Ornament variant="line" />
 
       <div className="space-y-6">
         <div className="space-y-3">
-          <Label className="text-sm font-medium text-foreground">Will you be attending?</Label>
+          <Label className="text-sm font-medium text-foreground">Sal u die troue bywoon?</Label>
           <RadioGroup
             value={status}
             onValueChange={(value) => setStatus(value as RsvpStatus)}
@@ -77,24 +77,24 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
           >
             <label className="flex items-center space-x-3 p-4 rounded-lg border border-border bg-card hover:bg-accent/30 transition-colors cursor-pointer">
               <RadioGroupItem value="attending" />
-              <span className="font-display text-lg">Joyfully Accepts</span>
+              <span className="font-display text-lg">Aanvaar met Vreugde</span>
             </label>
             <label className="flex items-center space-x-3 p-4 rounded-lg border border-border bg-card hover:bg-accent/30 transition-colors cursor-pointer">
               <RadioGroupItem value="not_attending" />
-              <span className="font-display text-lg">Regretfully Declines</span>
+              <span className="font-display text-lg">Bedank Ongelukkig</span>
             </label>
           </RadioGroup>
         </div>
 
         {status === "attending" && guest.plus_one_allowed && (
           <div className="space-y-4 p-4 rounded-lg bg-accent/20 animate-fade-in">
-            <p className="text-sm font-medium text-foreground">You're welcome to bring a guest!</p>
+            <p className="text-sm font-medium text-foreground">U is welkom om 'n gas saam te bring!</p>
             <div className="space-y-3">
-              <Label className="text-sm text-muted-foreground">Guest Name</Label>
+              <Label className="text-sm text-muted-foreground">Gas se Naam</Label>
               <Input
                 value={plusOneName}
                 onChange={(e) => setPlusOneName(e.target.value)}
-                placeholder="Guest's full name"
+                placeholder="Gas se volle naam"
                 className="bg-card"
               />
             </div>
@@ -102,12 +102,12 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
         )}
 
         <div className="space-y-3">
-          <Label className="text-sm font-medium text-foreground">Song Request</Label>
-          <p className="text-xs text-muted-foreground">What song will get you on the dance floor?</p>
+          <Label className="text-sm font-medium text-foreground">Liedjie Versoek</Label>
+          <p className="text-xs text-muted-foreground">Watter liedjie sal u laat dans?</p>
           <Textarea
             value={songRequest}
             onChange={(e) => setSongRequest(e.target.value)}
-            placeholder="Tell us the song that will make you dance!"
+            placeholder="Vertel ons watter liedjie u sal laat dans!"
             className="bg-card min-h-[100px]"
           />
         </div>
@@ -120,7 +120,7 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
         className="w-full"
         disabled={isSubmitting}
       >
-        {isSubmitting ? "Sending..." : "Send Response"}
+        {isSubmitting ? "Besig om te stuur..." : "Stuur Antwoord"}
       </Button>
     </form>
   );

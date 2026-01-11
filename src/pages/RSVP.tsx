@@ -58,13 +58,13 @@ const RSVP = () => {
         .single();
 
       if (error || !data) {
-        setError("We couldn't find your invitation. Please check your code.");
+        setError("Ons kon nie u uitnodiging vind nie. Kontroleer asseblief u kode.");
         setGuest(null);
       } else {
         setGuest(data);
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError("Iets het verkeerd gegaan. Probeer asseblief weer.");
     } finally {
       setIsLoading(false);
     }
@@ -84,10 +84,10 @@ const RSVP = () => {
           <div className="w-20 h-20 mx-auto rounded-full bg-secondary flex items-center justify-center border-2 border-gold/40">
             <Heart className="w-10 h-10 text-burgundy fill-burgundy" />
           </div>
-          <h1 className="font-display text-4xl text-foreground italic">Thank You!</h1>
+          <h1 className="font-display text-4xl text-foreground italic">Baie Dankie!</h1>
           <Ornament variant="line" />
           <p className="text-muted-foreground text-lg font-body">
-            Your response has been received. We are so excited to celebrate with you!
+            U antwoord is ontvang. Ons is so opgewonde om saam met u te vier!
           </p>
         </div>
       </div>
@@ -105,7 +105,7 @@ const RSVP = () => {
         </div>
 
         <div className="relative z-10 max-w-2xl mx-auto space-y-6 animate-fade-in-up">
-          <p className="text-burgundy uppercase tracking-[0.3em] text-sm font-body">You are Cordially Invited</p>
+          <p className="text-burgundy uppercase tracking-[0.3em] text-sm font-body">U Word Hartlik Uitgenooi</p>
           
           <div className="relative py-8">
             {watermarkUrl && (
@@ -123,7 +123,7 @@ const RSVP = () => {
           <Ornament variant="victorian" className="py-4" />
           
           <p className="font-body text-xl text-muted-foreground italic">
-            Request the pleasure of your company
+            Versoek die plesier van u teenwoordigheid
           </p>
         </div>
       </section>
@@ -135,23 +135,23 @@ const RSVP = () => {
             <div className="w-12 h-12 mx-auto rounded-full bg-secondary flex items-center justify-center border border-gold/30">
               <Calendar className="w-5 h-5 text-burgundy" />
             </div>
-            <h3 className="font-display text-xl text-foreground italic">Date</h3>
-            <p className="text-muted-foreground font-body">Saturday, August 1, 2026</p>
+            <h3 className="font-display text-xl text-foreground italic">Datum</h3>
+            <p className="text-muted-foreground font-body">Saterdag, 1 Augustus 2026</p>
           </div>
           
           <div className="space-y-3 animate-fade-in-up animate-delay-200">
             <div className="w-12 h-12 mx-auto rounded-full bg-secondary flex items-center justify-center border border-gold/30">
               <Clock className="w-5 h-5 text-burgundy" />
             </div>
-            <h3 className="font-display text-xl text-foreground italic">Time</h3>
-            <p className="text-muted-foreground font-body">Ceremony at 3:00 PM</p>
+            <h3 className="font-display text-xl text-foreground italic">Tyd</h3>
+            <p className="text-muted-foreground font-body">Seremonie om 15:00</p>
           </div>
           
           <div className="space-y-3 animate-fade-in-up animate-delay-300">
             <div className="w-12 h-12 mx-auto rounded-full bg-secondary flex items-center justify-center border border-gold/30">
               <MapPin className="w-5 h-5 text-burgundy" />
             </div>
-            <h3 className="font-display text-xl text-foreground italic">Location</h3>
+            <h3 className="font-display text-xl text-foreground italic">Plek</h3>
             <a href="https://maps.app.goo.gl/1GAG8P298AB3p9586" target="_blank" rel="noopener noreferrer" className="text-muted-foreground font-body hover:text-burgundy transition-colors underline underline-offset-2">Dstasie Kirkwood</a>
           </div>
         </div>
@@ -164,9 +164,9 @@ const RSVP = () => {
             {!guest ? (
               <div className="space-y-8">
                 <div className="text-center space-y-4">
-                  <h2 className="font-display text-3xl text-foreground italic">RSVP</h2>
+                  <h2 className="font-display text-3xl text-foreground italic">Antwoord Asseblief</h2>
                   <p className="text-muted-foreground font-body">
-                    Enter your invitation code to respond
+                    Voer u uitnodigingskode in om te antwoord
                   </p>
                 </div>
 
@@ -176,7 +176,7 @@ const RSVP = () => {
                   <Input
                     value={inviteCode}
                     onChange={(e) => setInviteCode(e.target.value)}
-                    placeholder="Enter your invitation code"
+                    placeholder="Voer u uitnodigingskode in"
                     className="text-center text-lg h-14 bg-background font-body"
                   />
                   {error && (
@@ -189,7 +189,7 @@ const RSVP = () => {
                     className="w-full"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Looking up..." : "Find My Invitation"}
+                    {isLoading ? "Besig om te soek..." : "Vind My Uitnodiging"}
                   </Button>
                 </form>
               </div>
@@ -204,7 +204,7 @@ const RSVP = () => {
       <footer className="py-12 text-center">
         <Ornament variant="floral" />
         <p className="mt-6 text-muted-foreground text-sm font-body italic">
-          We cannot wait to celebrate with you
+          Ons kan nie wag om saam met u te vier nie
         </p>
       </footer>
     </div>
