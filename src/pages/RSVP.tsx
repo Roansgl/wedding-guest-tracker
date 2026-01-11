@@ -136,7 +136,7 @@ const RSVP = () => {
               <Calendar className="w-5 h-5 text-burgundy" />
             </div>
             <h3 className="font-display text-xl text-foreground italic">Date</h3>
-            <p className="text-muted-foreground font-body">Friday, August 1, 2025</p>
+            <p className="text-muted-foreground font-body">Saturday, August 1, 2026</p>
           </div>
           
           <div className="space-y-3 animate-fade-in-up animate-delay-200">
