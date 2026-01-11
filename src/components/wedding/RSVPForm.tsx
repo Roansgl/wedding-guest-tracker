@@ -23,9 +23,9 @@ type RsvpStatus = "attending" | "not_attending";
 
 export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
   const [status, setStatus] = useState<RsvpStatus>("attending");
-  const [dietaryNotes, setDietaryNotes] = useState("");
+  const [songRequest, setSongRequest] = useState("");
   const [plusOneName, setPlusOneName] = useState("");
-  const [message, setMessage] = useState("");
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,9 +38,9 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
         .upsert({
           guest_id: guest.id,
           status,
-          dietary_notes: status === "attending" ? dietaryNotes : null,
+          dietary_notes: null,
           plus_one_name: status === "attending" && guest.plus_one_allowed ? plusOneName : null,
-          message,
+          message: songRequest,
           responded_at: new Date().toISOString(),
         }, {
           onConflict: 'guest_id'
@@ -86,41 +86,28 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
           </RadioGroup>
         </div>
 
-        {status === "attending" && (
-          <>
-            <div className="space-y-3 animate-fade-in">
-              <Label className="text-sm font-medium text-foreground">Dietary Restrictions or Allergies</Label>
+        {status === "attending" && guest.plus_one_allowed && (
+          <div className="space-y-4 p-4 rounded-lg bg-accent/20 animate-fade-in">
+            <p className="text-sm font-medium text-foreground">You're welcome to bring a guest!</p>
+            <div className="space-y-3">
+              <Label className="text-sm text-muted-foreground">Guest Name</Label>
               <Input
-                value={dietaryNotes}
-                onChange={(e) => setDietaryNotes(e.target.value)}
-                placeholder="Please let us know of any dietary requirements"
+                value={plusOneName}
+                onChange={(e) => setPlusOneName(e.target.value)}
+                placeholder="Guest's full name"
                 className="bg-card"
               />
             </div>
-
-            {guest.plus_one_allowed && (
-              <div className="space-y-4 p-4 rounded-lg bg-accent/20 animate-fade-in animate-delay-100">
-                <p className="text-sm font-medium text-foreground">You're welcome to bring a guest!</p>
-                <div className="space-y-3">
-                  <Label className="text-sm text-muted-foreground">Guest Name</Label>
-                  <Input
-                    value={plusOneName}
-                    onChange={(e) => setPlusOneName(e.target.value)}
-                    placeholder="Guest's full name"
-                    className="bg-card"
-                  />
-                </div>
-              </div>
-            )}
-          </>
+          </div>
         )}
 
         <div className="space-y-3">
-          <Label className="text-sm font-medium text-foreground">Message to the Couple (Optional)</Label>
+          <Label className="text-sm font-medium text-foreground">Song Request</Label>
+          <p className="text-xs text-muted-foreground">What song will get you on the dance floor?</p>
           <Textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Share your wishes or any message..."
+            value={songRequest}
+            onChange={(e) => setSongRequest(e.target.value)}
+            placeholder="Tell us the song that will make you dance!"
             className="bg-card min-h-[100px]"
           />
         </div>
