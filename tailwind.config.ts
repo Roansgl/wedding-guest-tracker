@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Playfair Display', 'serif'],
-        body: ['Crimson Text', 'serif'],
+        display: ['Playfair Display', 'Cormorant Garamond', 'serif'],
+        body: ['Crimson Text', 'Cormorant Garamond', 'serif'],
+        script: ['Cormorant Garamond', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -61,21 +62,50 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Vintage terracotta palette
+        terracotta: {
+          DEFAULT: "hsl(var(--terracotta))",
+          light: "hsl(var(--terracotta-light))",
+          muted: "hsl(var(--terracotta-muted))",
+        },
+        caramel: {
+          DEFAULT: "hsl(var(--caramel))",
+          light: "hsl(var(--caramel-light))",
+        },
+        rust: {
+          DEFAULT: "hsl(var(--rust))",
+          light: "hsl(var(--rust-light))",
+        },
+        cinnamon: "hsl(var(--cinnamon))",
+        "dusty-rose": {
+          DEFAULT: "hsl(var(--dusty-rose))",
+          light: "hsl(var(--dusty-rose-light))",
+        },
+        olive: {
+          DEFAULT: "hsl(var(--olive))",
+          muted: "hsl(var(--olive-muted))",
+        },
+        "earth-brown": "hsl(var(--earth-brown))",
+        // Parchment & paper tones
+        parchment: {
+          DEFAULT: "hsl(var(--parchment))",
+          dark: "hsl(var(--parchment-dark))",
+        },
+        cream: {
+          DEFAULT: "hsl(var(--cream))",
+          warm: "hsl(var(--cream-warm))",
+        },
+        "aged-paper": "hsl(var(--aged-paper))",
+        lace: "hsl(var(--lace))",
+        "antique-white": "hsl(var(--antique-white))",
+        // Legacy tokens
         gold: "hsl(var(--gold))",
         "gold-light": "hsl(var(--gold-light))",
         burgundy: "hsl(var(--burgundy))",
         "burgundy-light": "hsl(var(--burgundy-light))",
-        cream: "hsl(var(--cream))",
-        "cream-dark": "hsl(var(--cream-dark))",
         forest: "hsl(var(--forest))",
         "forest-light": "hsl(var(--forest-light))",
         sepia: "hsl(var(--sepia))",
-        parchment: "hsl(var(--parchment))",
-        terracotta: "hsl(var(--terracotta))",
-        "terracotta-light": "hsl(var(--terracotta-light))",
-        rust: "hsl(var(--rust))",
-        lace: "hsl(var(--lace))",
-        "aged-paper": "hsl(var(--aged-paper))",
       },
       borderRadius: {
         lg: "var(--radius)",
