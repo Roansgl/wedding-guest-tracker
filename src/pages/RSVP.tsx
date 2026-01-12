@@ -105,7 +105,9 @@ const RSVP = () => {
         </div>
 
         <div className="relative z-10 max-w-2xl mx-auto space-y-6 animate-fade-in-up">
-          <p className="text-burgundy uppercase tracking-[0.3em] text-sm font-body">U Word Hartlik Uitgenooi</p>
+          <p className="text-burgundy uppercase tracking-[0.3em] text-sm font-body">
+            Ons nooi u hartlik uit na die begin van ons "vir ewig en altyd"
+          </p>
           
           <div className="relative py-8">
             {watermarkUrl && (
@@ -123,7 +125,7 @@ const RSVP = () => {
           <Ornament variant="victorian" className="py-4" />
           
           <p className="font-body text-xl text-muted-foreground italic">
-            Versoek die plesier van u teenwoordigheid
+            RSVP asseblief teen 10 Februarie 2026
           </p>
         </div>
       </section>
@@ -166,7 +168,7 @@ const RSVP = () => {
                 <div className="text-center space-y-4">
                   <h2 className="font-display text-3xl text-foreground italic">Antwoord Asseblief</h2>
                   <p className="text-muted-foreground font-body">
-                    Voer u uitnodigingskode in om te antwoord
+                    Voer u uitnodigingskode in
                   </p>
                 </div>
 
