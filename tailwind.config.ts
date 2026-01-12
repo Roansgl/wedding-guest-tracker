@@ -71,6 +71,11 @@ export default {
         "forest-light": "hsl(var(--forest-light))",
         sepia: "hsl(var(--sepia))",
         parchment: "hsl(var(--parchment))",
+        terracotta: "hsl(var(--terracotta))",
+        "terracotta-light": "hsl(var(--terracotta-light))",
+        rust: "hsl(var(--rust))",
+        lace: "hsl(var(--lace))",
+        "aged-paper": "hsl(var(--aged-paper))",
       },
       borderRadius: {
         lg: "var(--radius)",

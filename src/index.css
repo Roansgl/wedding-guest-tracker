@@ -6,114 +6,120 @@
 
 @layer base {
   :root {
-    /* Victorian Vintage palette - burgundy, gold, cream, forest green */
-    --background: 35 30% 95%;
-    --foreground: 25 30% 15%;
+    /* Vintage Terracotta & Lace palette - warm earthy tones with aged elegance */
+    --background: 30 25% 92%;
+    --foreground: 20 35% 18%;
 
-    --card: 35 35% 93%;
-    --card-foreground: 25 30% 15%;
+    --card: 32 30% 89%;
+    --card-foreground: 20 35% 18%;
 
-    --popover: 35 35% 93%;
-    --popover-foreground: 25 30% 15%;
+    --popover: 32 30% 89%;
+    --popover-foreground: 20 35% 18%;
 
-    /* Deep burgundy as primary */
-    --primary: 345 45% 35%;
-    --primary-foreground: 35 30% 95%;
+    /* Warm terracotta as primary */
+    --primary: 18 55% 42%;
+    --primary-foreground: 35 35% 95%;
 
-    /* Antique cream secondary */
-    --secondary: 40 35% 88%;
-    --secondary-foreground: 25 30% 20%;
+    /* Antique lace cream secondary */
+    --secondary: 38 40% 85%;
+    --secondary-foreground: 20 35% 22%;
 
-    --muted: 35 20% 88%;
-    --muted-foreground: 25 15% 40%;
+    --muted: 32 22% 82%;
+    --muted-foreground: 20 20% 38%;
 
-    /* Forest green accent */
-    --accent: 150 25% 30%;
-    --accent-foreground: 35 30% 95%;
+    /* Dusty rose accent */
+    --accent: 8 35% 55%;
+    --accent-foreground: 35 35% 95%;
 
-    --destructive: 0 65% 45%;
-    --destructive-foreground: 35 30% 95%;
+    --destructive: 0 60% 42%;
+    --destructive-foreground: 35 35% 95%;
 
-    --border: 35 25% 80%;
-    --input: 35 25% 85%;
-    --ring: 38 60% 45%;
+    --border: 28 25% 72%;
+    --input: 30 25% 80%;
+    --ring: 18 50% 45%;
 
-    --radius: 0.25rem;
+    --radius: 0.125rem;
 
-    /* Custom Victorian tokens */
-    --gold: 38 70% 45%;
-    --gold-light: 40 60% 65%;
-    --burgundy: 345 45% 35%;
-    --burgundy-light: 345 35% 50%;
-    --cream: 35 30% 95%;
-    --cream-dark: 35 25% 85%;
-    --forest: 150 25% 30%;
-    --forest-light: 150 20% 45%;
-    --sepia: 30 35% 75%;
-    --parchment: 40 40% 92%;
+    /* Custom Vintage Terracotta tokens */
+    --gold: 32 55% 48%;
+    --gold-light: 35 50% 62%;
+    --burgundy: 18 55% 42%;
+    --burgundy-light: 15 45% 52%;
+    --cream: 38 40% 93%;
+    --cream-dark: 32 30% 82%;
+    --forest: 25 30% 32%;
+    --forest-light: 22 25% 45%;
+    --sepia: 28 40% 68%;
+    --parchment: 35 45% 88%;
+    --terracotta: 18 55% 42%;
+    --terracotta-light: 15 50% 55%;
+    --rust: 12 50% 35%;
+    --lace: 40 50% 96%;
+    --aged-paper: 32 35% 85%;
 
     /* Typography */
     --font-display: 'Playfair Display', serif;
     --font-body: 'Crimson Text', serif;
 
     /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(38 70% 45%), hsl(40 65% 55%));
-    --gradient-burgundy: linear-gradient(135deg, hsl(345 45% 35%), hsl(345 40% 45%));
-    --gradient-hero: linear-gradient(180deg, hsl(35 30% 95%) 0%, hsl(40 40% 92%) 50%, hsl(35 30% 95%) 100%);
-    --gradient-parchment: linear-gradient(180deg, hsl(40 40% 92%), hsl(35 30% 95%));
+    --gradient-gold: linear-gradient(135deg, hsl(32 55% 48%), hsl(35 50% 58%));
+    --gradient-burgundy: linear-gradient(135deg, hsl(18 55% 42%), hsl(15 50% 52%));
+    --gradient-hero: linear-gradient(180deg, hsl(38 40% 93%) 0%, hsl(32 35% 88%) 50%, hsl(30 25% 92%) 100%);
+    --gradient-parchment: linear-gradient(180deg, hsl(35 45% 88%), hsl(30 25% 92%));
+    --gradient-aged: linear-gradient(180deg, hsl(32 35% 85%) 0%, hsl(28 30% 80%) 100%);
 
     /* Shadows */
-    --shadow-soft: 0 4px 20px -5px hsl(25 30% 40% / 0.2);
-    --shadow-elegant: 0 10px 40px -10px hsl(345 45% 35% / 0.2);
-    --shadow-card: 0 2px 15px -3px hsl(25 20% 50% / 0.15);
+    --shadow-soft: 0 4px 20px -5px hsl(20 35% 30% / 0.18);
+    --shadow-elegant: 0 10px 40px -10px hsl(18 55% 35% / 0.22);
+    --shadow-card: 0 2px 15px -3px hsl(25 30% 45% / 0.12);
 
-    --sidebar-background: 35 30% 95%;
-    --sidebar-foreground: 25 30% 15%;
-    --sidebar-primary: 345 45% 35%;
-    --sidebar-primary-foreground: 35 30% 95%;
-    --sidebar-accent: 40 35% 88%;
-    --sidebar-accent-foreground: 25 30% 15%;
-    --sidebar-border: 35 25% 80%;
-    --sidebar-ring: 38 60% 45%;
+    --sidebar-background: 30 25% 92%;
+    --sidebar-foreground: 20 35% 18%;
+    --sidebar-primary: 18 55% 42%;
+    --sidebar-primary-foreground: 35 35% 95%;
+    --sidebar-accent: 38 40% 85%;
+    --sidebar-accent-foreground: 20 35% 18%;
+    --sidebar-border: 28 25% 72%;
+    --sidebar-ring: 18 50% 45%;
   }
 
   .dark {
-    --background: 25 25% 8%;
-    --foreground: 35 25% 90%;
+    --background: 20 25% 8%;
+    --foreground: 32 30% 88%;
 
-    --card: 25 20% 12%;
-    --card-foreground: 35 25% 90%;
+    --card: 20 22% 12%;
+    --card-foreground: 32 30% 88%;
 
-    --popover: 25 20% 12%;
-    --popover-foreground: 35 25% 90%;
+    --popover: 20 22% 12%;
+    --popover-foreground: 32 30% 88%;
 
-    --primary: 345 40% 50%;
-    --primary-foreground: 25 25% 8%;
+    --primary: 18 50% 48%;
+    --primary-foreground: 20 25% 8%;
 
-    --secondary: 25 15% 18%;
-    --secondary-foreground: 35 25% 85%;
+    --secondary: 22 18% 18%;
+    --secondary-foreground: 32 28% 82%;
 
-    --muted: 25 15% 16%;
-    --muted-foreground: 35 15% 55%;
+    --muted: 22 15% 16%;
+    --muted-foreground: 30 18% 52%;
 
-    --accent: 150 20% 35%;
-    --accent-foreground: 35 25% 90%;
+    --accent: 8 30% 45%;
+    --accent-foreground: 32 30% 88%;
 
-    --destructive: 0 55% 40%;
-    --destructive-foreground: 35 25% 90%;
+    --destructive: 0 50% 38%;
+    --destructive-foreground: 32 30% 88%;
 
-    --border: 25 15% 20%;
-    --input: 25 15% 20%;
-    --ring: 38 55% 50%;
+    --border: 22 18% 22%;
+    --input: 22 18% 22%;
+    --ring: 18 48% 48%;
 
-    --sidebar-background: 25 25% 8%;
-    --sidebar-foreground: 35 25% 90%;
-    --sidebar-primary: 345 40% 50%;
-    --sidebar-primary-foreground: 25 25% 8%;
-    --sidebar-accent: 25 15% 16%;
-    --sidebar-accent-foreground: 35 25% 90%;
-    --sidebar-border: 25 15% 20%;
-    --sidebar-ring: 38 55% 50%;
+    --sidebar-background: 20 25% 8%;
+    --sidebar-foreground: 32 30% 88%;
+    --sidebar-primary: 18 50% 48%;
+    --sidebar-primary-foreground: 20 25% 8%;
+    --sidebar-accent: 22 15% 16%;
+    --sidebar-accent-foreground: 32 30% 88%;
+    --sidebar-border: 22 18% 22%;
+    --sidebar-ring: 18 48% 48%;
   }
 }
 
@@ -201,7 +207,7 @@
     box-shadow: var(--shadow-card);
   }
 
-  /* Victorian decorative flourish */
+  /* Victorian decorative flourish with terracotta */
   .flourish {
     position: relative;
   }
@@ -209,8 +215,8 @@
   .flourish::before,
   .flourish::after {
     content: '❧';
-    color: hsl(var(--gold));
-    opacity: 0.7;
+    color: hsl(var(--terracotta));
+    opacity: 0.5;
     font-size: 1em;
     position: absolute;
     top: 50%;
@@ -226,12 +232,12 @@
     right: -2em;
   }
 
-  /* Ornate Victorian divider */
+  /* Ornate vintage divider */
   .divider-ornate {
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: hsl(var(--gold));
+    color: hsl(var(--terracotta));
   }
 
   .divider-ornate::before,
@@ -239,12 +245,12 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), transparent);
+    background: linear-gradient(90deg, transparent, hsl(var(--terracotta) / 0.4), transparent);
   }
 
-  /* Victorian border frame */
+  /* Victorian border frame with terracotta */
   .border-victorian {
-    border: 2px solid hsl(var(--gold) / 0.4);
+    border: 2px solid hsl(var(--terracotta) / 0.35);
     position: relative;
   }
 
@@ -252,15 +258,62 @@
     content: '';
     position: absolute;
     inset: 4px;
-    border: 1px solid hsl(var(--gold) / 0.2);
+    border: 1px solid hsl(var(--terracotta) / 0.18);
     pointer-events: none;
   }
 
   /* Aged paper texture effect */
   .texture-paper {
     background-image: 
-      radial-gradient(ellipse at 50% 0%, hsl(40 40% 95% / 0.8) 0%, transparent 50%),
-      radial-gradient(ellipse at 100% 100%, hsl(35 30% 85% / 0.4) 0%, transparent 50%);
+      radial-gradient(ellipse at 50% 0%, hsl(38 45% 92% / 0.9) 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 100%, hsl(28 35% 78% / 0.5) 0%, transparent 50%),
+      radial-gradient(ellipse at 0% 80%, hsl(20 30% 72% / 0.3) 0%, transparent 40%);
+  }
+
+  /* Lace overlay pattern */
+  .lace-overlay {
+    position: relative;
+  }
+  
+  .lace-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    pointer-events: none;
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(20 35% 18%) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, hsl(20 35% 18%) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Vintage worn edges effect */
+  .worn-edges {
+    position: relative;
+    box-shadow: 
+      inset 0 0 30px hsl(28 30% 70% / 0.3),
+      inset 0 0 60px hsl(22 25% 65% / 0.15);
+  }
+
+  /* Terracotta text */
+  .text-terracotta {
+    color: hsl(var(--terracotta));
+  }
+
+  .bg-terracotta {
+    background-color: hsl(var(--terracotta));
+  }
+
+  .bg-lace {
+    background-color: hsl(var(--lace));
+  }
+
+  .bg-aged-paper {
+    background-color: hsl(var(--aged-paper));
+  }
+
+  .gradient-aged {
+    background: var(--gradient-aged);
   }
 }
 
