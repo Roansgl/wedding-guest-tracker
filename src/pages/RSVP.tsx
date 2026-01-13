@@ -3,9 +3,11 @@ import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { RSVPForm } from "@/components/wedding/RSVPForm";
 import { Ornament } from "@/components/wedding/Ornament";
+import { WeddingInfoDialog } from "@/components/wedding/WeddingInfoDialog";
+import { RSVPSuccessDialog } from "@/components/wedding/RSVPSuccessDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Heart, MapPin, Calendar, Clock } from "lucide-react";
+import { Heart, MapPin, Calendar, Clock, AlertCircle } from "lucide-react";
 
 interface Guest {
   id: string;
@@ -21,6 +23,8 @@ const RSVP = () => {
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [watermarkUrl, setWatermarkUrl] = useState<string | null>(null);
+  const [showInfoDialog, setShowInfoDialog] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   useEffect(() => {
     const code = searchParams.get("code");
@@ -77,7 +81,14 @@ const RSVP = () => {
     }
   };
 
-  if (submitted) {
+  const handleRSVPSuccess = (isAttending: boolean) => {
+    setSubmitted(true);
+    if (isAttending) {
+      setShowSuccessDialog(true);
+    }
+  };
+
+  if (submitted && !showSuccessDialog) {
     return (
       <div className="min-h-screen texture-paper lace-overlay sepia-tint flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center space-y-8 animate-fade-in-up">
@@ -87,7 +98,7 @@ const RSVP = () => {
           <h1 className="font-display text-4xl text-foreground italic">Baie Dankie!</h1>
           <Ornament variant="line" />
           <p className="text-muted-foreground text-lg font-body">
-            U antwoord is ontvang. Ons is so opgewonde om saam met u te vier!
+            U antwoord is ontvang.
           </p>
         </div>
       </div>
@@ -129,6 +140,15 @@ const RSVP = () => {
           <p className="font-script text-2xl text-muted-foreground">
             RSVP asseblief teen 10 Februarie 2026
           </p>
+
+          {/* MOET LEES Link */}
+          <button
+            onClick={() => setShowInfoDialog(true)}
+            className="inline-flex items-center gap-2 mt-4 text-terracotta hover:text-terracotta/80 font-display text-lg underline underline-offset-4 decoration-2 transition-colors"
+          >
+            <AlertCircle className="w-5 h-5" />
+            MOET LEES
+          </button>
         </div>
       </section>
 
@@ -198,7 +218,7 @@ const RSVP = () => {
                 </form>
               </div>
             ) : (
-              <RSVPForm guest={guest} onSuccess={() => setSubmitted(true)} />
+              <RSVPForm guest={guest} onSuccess={handleRSVPSuccess} />
             )}
           </div>
         </div>
@@ -211,6 +231,12 @@ const RSVP = () => {
           Ons kan nie wag om saam met u te vier nie
         </p>
       </footer>
+
+      {/* Wedding Info Dialog */}
+      <WeddingInfoDialog open={showInfoDialog} onOpenChange={setShowInfoDialog} />
+      
+      {/* RSVP Success Dialog */}
+      <RSVPSuccessDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog} />
     </div>
   );
 };

@@ -16,7 +16,7 @@ interface Guest {
 
 interface RSVPFormProps {
   guest: Guest;
-  onSuccess: () => void;
+  onSuccess: (isAttending: boolean) => void;
 }
 
 type RsvpStatus = "attending" | "not_attending";
@@ -25,12 +25,21 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
   const [status, setStatus] = useState<RsvpStatus>("attending");
   const [songRequest, setSongRequest] = useState("");
   const [plusOneName, setPlusOneName] = useState("");
+  const [songError, setSongError] = useState("");
   
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate song request is required
+    if (status === "attending" && !songRequest.trim()) {
+      setSongError("Hierdie veld is verpligtend");
+      return;
+    }
+    
     setIsSubmitting(true);
+    setSongError("");
 
     try {
       const { error } = await supabase
@@ -49,7 +58,7 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
       if (error) throw error;
 
       toast.success("Dankie vir u antwoord!");
-      onSuccess();
+      onSuccess(status === "attending");
     } catch (error) {
       console.error("RSVP error:", error);
       toast.error("Iets het verkeerd gegaan. Probeer asseblief weer.");
@@ -77,11 +86,11 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
           >
             <label className="flex items-center space-x-3 p-4 rounded-lg border border-border bg-card hover:bg-accent/30 transition-colors cursor-pointer">
               <RadioGroupItem value="attending" />
-              <span className="font-display text-lg">Aanvaar met Vreugde</span>
+              <span className="font-display text-lg">Ja, ons sal daar wees</span>
             </label>
             <label className="flex items-center space-x-3 p-4 rounded-lg border border-border bg-card hover:bg-accent/30 transition-colors cursor-pointer">
               <RadioGroupItem value="not_attending" />
-              <span className="font-display text-lg">Bedank Ongelukkig</span>
+              <span className="font-display text-lg">Nee, ons sal dit nie kan maak nie</span>
             </label>
           </RadioGroup>
         </div>
@@ -101,16 +110,27 @@ export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
           </div>
         )}
 
-        <div className="space-y-3">
-          <Label className="text-sm font-medium text-foreground">Liedjie Versoek</Label>
-          <p className="text-xs text-muted-foreground">Watter liedjie sal u laat dans?</p>
-          <Textarea
-            value={songRequest}
-            onChange={(e) => setSongRequest(e.target.value)}
-            placeholder="Vertel ons watter liedjie u sal laat dans!"
-            className="bg-card min-h-[100px]"
-          />
-        </div>
+        {status === "attending" && (
+          <div className="space-y-3 animate-fade-in">
+            <Label className="text-sm font-medium text-foreground">
+              Liedjie Versoek <span className="text-terracotta">*</span>
+            </Label>
+            <p className="text-xs text-muted-foreground">Watter liedjie sal u laat dans?</p>
+            <Textarea
+              value={songRequest}
+              onChange={(e) => {
+                setSongRequest(e.target.value);
+                if (songError) setSongError("");
+              }}
+              placeholder="Vertel ons watter liedjie u sal laat dans!"
+              className={`bg-card min-h-[100px] ${songError ? 'border-destructive' : ''}`}
+              required
+            />
+            {songError && (
+              <p className="text-destructive text-xs">{songError}</p>
+            )}
+          </div>
+        )}
       </div>
 
       <Button
