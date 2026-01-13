@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Ornament } from "@/components/wedding/Ornament";
 import { toast } from "sonner";
 import { 
@@ -16,7 +17,12 @@ import {
   Trash2,
   Search,
   Upload,
-  Image
+  Image,
+  Save,
+  MapPin,
+  Home,
+  FileText,
+  Cloud
 } from "lucide-react";
 import {
   Table,
@@ -44,6 +50,14 @@ interface GuestWithRSVP extends Guest {
   rsvps: RSVP | null;
 }
 
+interface WeddingInfo {
+  directions_text: string;
+  directions_map_url: string;
+  accommodation_text: string;
+  notes_text: string;
+  weather_location: string;
+}
+
 const Admin = () => {
   const navigate = useNavigate();
   const [guests, setGuests] = useState<GuestWithRSVP[]>([]);
@@ -57,6 +71,16 @@ const Admin = () => {
   const [watermarkUrl, setWatermarkUrl] = useState<string | null>(null);
   const [isUploadingWatermark, setIsUploadingWatermark] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Wedding info state
+  const [weddingInfo, setWeddingInfo] = useState<WeddingInfo>({
+    directions_text: "",
+    directions_map_url: "",
+    accommodation_text: "",
+    notes_text: "",
+    weather_location: "Kirkwood,Eastern Cape,ZA",
+  });
+  const [isSavingInfo, setIsSavingInfo] = useState(false);
 
   const filteredGuests = guests.filter((guest) =>
     guest.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -77,11 +101,73 @@ const Admin = () => {
       } else {
         fetchGuests();
         fetchWatermark();
+        fetchWeddingInfo();
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  const fetchWeddingInfo = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("wedding_settings")
+        .select("key, value")
+        .in("key", ["directions_text", "directions_map_url", "accommodation_text", "notes_text", "weather_location"]);
+
+      if (error) throw error;
+
+      const infoObj: WeddingInfo = {
+        directions_text: "",
+        directions_map_url: "",
+        accommodation_text: "",
+        notes_text: "",
+        weather_location: "Kirkwood,Eastern Cape,ZA",
+      };
+
+      data?.forEach((item) => {
+        if (item.key in infoObj && item.value) {
+          infoObj[item.key as keyof WeddingInfo] = item.value;
+        }
+      });
+
+      setWeddingInfo(infoObj);
+    } catch (error) {
+      console.error("Error fetching wedding info:", error);
+    }
+  };
+
+  const handleSaveWeddingInfo = async () => {
+    setIsSavingInfo(true);
+    try {
+      const updates = Object.entries(weddingInfo).map(async ([key, value]) => {
+        const { data: existing } = await supabase
+          .from("wedding_settings")
+          .select("id")
+          .eq("key", key)
+          .maybeSingle();
+
+        if (existing) {
+          return supabase
+            .from("wedding_settings")
+            .update({ value: value || null, updated_at: new Date().toISOString() })
+            .eq("key", key);
+        } else {
+          return supabase
+            .from("wedding_settings")
+            .insert({ key, value: value || null });
+        }
+      });
+
+      await Promise.all(updates);
+      toast.success("Troue-inligting gestoor!");
+    } catch (error) {
+      console.error("Error saving wedding info:", error);
+      toast.error("Kon nie inligting stoor nie");
+    } finally {
+      setIsSavingInfo(false);
+    }
+  };
 
   const fetchWatermark = async () => {
     try {
@@ -286,6 +372,93 @@ const Admin = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 space-y-8">
+        {/* Wedding Info Section */}
+        <div className="bg-card rounded-xl p-6 shadow-card space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-display text-xl text-foreground">Troue-Inligting</h2>
+              <p className="text-sm text-muted-foreground">Bestuur aanwysings, verblyf en notas vir gaste</p>
+            </div>
+            <Button
+              variant="gold"
+              onClick={handleSaveWeddingInfo}
+              disabled={isSavingInfo}
+            >
+              {isSavingInfo ? (
+                "Stoor..."
+              ) : (
+                <>
+                  <Save className="w-4 h-4 mr-2" />
+                  Stoor Inligting
+                </>
+              )}
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Directions */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-terracotta" />
+                <Label className="font-medium">Aanwysings</Label>
+              </div>
+              <Textarea
+                value={weddingInfo.directions_text}
+                onChange={(e) => setWeddingInfo(prev => ({ ...prev, directions_text: e.target.value }))}
+                placeholder="Voer aanwysings in..."
+                className="min-h-[100px]"
+              />
+              <Input
+                value={weddingInfo.directions_map_url}
+                onChange={(e) => setWeddingInfo(prev => ({ ...prev, directions_map_url: e.target.value }))}
+                placeholder="Google Maps skakel (opsioneel)"
+              />
+            </div>
+
+            {/* Accommodation */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Home className="w-4 h-4 text-terracotta" />
+                <Label className="font-medium">Verblyf</Label>
+              </div>
+              <Textarea
+                value={weddingInfo.accommodation_text}
+                onChange={(e) => setWeddingInfo(prev => ({ ...prev, accommodation_text: e.target.value }))}
+                placeholder="Voer verblyf-inligting in..."
+                className="min-h-[120px]"
+              />
+            </div>
+
+            {/* Notes */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-terracotta" />
+                <Label className="font-medium">Notas (bv. bring warm klere)</Label>
+              </div>
+              <Textarea
+                value={weddingInfo.notes_text}
+                onChange={(e) => setWeddingInfo(prev => ({ ...prev, notes_text: e.target.value }))}
+                placeholder="Voer notas vir gaste in..."
+                className="min-h-[100px]"
+              />
+            </div>
+
+            {/* Weather Location */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Cloud className="w-4 h-4 text-terracotta" />
+                <Label className="font-medium">Weer Ligging (vir AccuWeather)</Label>
+              </div>
+              <Input
+                value={weddingInfo.weather_location}
+                onChange={(e) => setWeddingInfo(prev => ({ ...prev, weather_location: e.target.value }))}
+                placeholder="Stad, Provinsie, Land"
+              />
+              <p className="text-xs text-muted-foreground">Formaat: Kirkwood,Eastern Cape,ZA</p>
+            </div>
+          </div>
+        </div>
+
         {/* Watermark Upload */}
         <div className="bg-card rounded-xl p-6 shadow-card">
           <div className="flex items-center justify-between">
@@ -474,7 +647,7 @@ const Admin = () => {
                   <TableHead>Invite Code</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Plus One</TableHead>
-                  <TableHead>Message</TableHead>
+                  <TableHead>Liedjie Versoek</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
