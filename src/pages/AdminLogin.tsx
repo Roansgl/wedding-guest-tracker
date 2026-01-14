@@ -18,7 +18,6 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   useEffect(() => {
@@ -65,42 +64,20 @@ const AdminLogin = () => {
     setIsLoading(true);
 
     try {
-      if (isSignUp) {
-        const redirectUrl = `${window.location.origin}/admin`;
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: redirectUrl,
-          },
-        });
-        
-        if (error) {
-          if (error.message.includes("already registered")) {
-            toast.error("This email is already registered. Please log in.");
-          } else {
-            throw error;
-          }
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) {
+        if (error.message.includes("Invalid login")) {
+          toast.error("Ongeldige e-pos of wagwoord. Probeer asseblief weer.");
         } else {
-          toast.success("Account created! You can now log in.");
-          setIsSignUp(false);
-        }
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        
-        if (error) {
-          if (error.message.includes("Invalid login")) {
-            toast.error("Invalid email or password. Please try again.");
-          } else {
-            throw error;
-          }
+          throw error;
         }
       }
     } catch (error: any) {
-      toast.error(error.message || "An error occurred. Please try again.");
+      toast.error(error.message || "'n Fout het voorgekom. Probeer asseblief weer.");
     } finally {
       setIsLoading(false);
     }
@@ -111,22 +88,22 @@ const AdminLogin = () => {
       <div className="max-w-md w-full">
         <div className="bg-card shadow-elegant rounded-2xl p-8 md:p-10 animate-fade-in-up">
           <div className="text-center space-y-4 mb-8">
-            <h1 className="font-display text-3xl text-foreground">Admin Portal</h1>
+            <h1 className="font-display text-3xl text-foreground">Admin Portaal</h1>
             <p className="text-muted-foreground text-sm">
-              Manage your wedding guests and RSVPs
+              Bestuur jou troue gaste en RSVPs
             </p>
             <Ornament variant="line" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">E-pos</Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
+                placeholder="jou@epos.com"
                 className="bg-background"
               />
               {errors.email && (
@@ -135,7 +112,7 @@ const AdminLogin = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Wagwoord</Label>
               <Input
                 id="password"
                 type="password"
@@ -156,19 +133,9 @@ const AdminLogin = () => {
               className="w-full"
               disabled={isLoading}
             >
-              {isLoading ? "Please wait..." : isSignUp ? "Create Account" : "Sign In"}
+              {isLoading ? "Wag asseblief..." : "Teken In"}
             </Button>
           </form>
-
-          <div className="mt-6 text-center">
-            <button
-              type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up"}
-            </button>
-          </div>
         </div>
       </div>
     </div>
