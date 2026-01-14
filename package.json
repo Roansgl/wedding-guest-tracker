@@ -12,6 +12,10 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "scripts": {
+    "dev": "vite",
+    "build:dev": "vite build --mode development"
+  },
   "homepage": "https://Roan.sgl.github.io/repo",
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
