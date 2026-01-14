@@ -7,6 +7,11 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "homepage": "https://Roan.sgl.github.io/repo",
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
