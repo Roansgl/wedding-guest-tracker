@@ -31,14 +31,8 @@ const Index = () => {
             Manage your wedding invitations with elegance
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8 animate-fade-in-up animate-delay-400">
+          <div className="flex justify-center pt-8 animate-fade-in-up animate-delay-400">
             <Button variant="gold" size="xl" asChild>
-              <Link to="/rsvp">
-                <Send className="w-5 h-5 mr-2" />
-                Guest RSVP
-              </Link>
-            </Button>
-            <Button variant="outline-gold" size="xl" asChild>
               <Link to="/admin/login">
                 <Users className="w-5 h-5 mr-2" />
                 Admin Portal
