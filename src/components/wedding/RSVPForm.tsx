@@ -17,16 +17,17 @@ interface Guest {
 interface RSVPFormProps {
   guest: Guest;
   onSuccess: (isAttending: boolean) => void;
+  enableDietary?: boolean;
 }
 
 type RsvpStatus = "attending" | "not_attending";
 
-export const RSVPForm = ({ guest, onSuccess }: RSVPFormProps) => {
+export const RSVPForm = ({ guest, onSuccess, enableDietary }: RSVPFormProps) => {
   const [status, setStatus] = useState<RsvpStatus>("attending");
   const [songRequest, setSongRequest] = useState("");
   const [plusOneName, setPlusOneName] = useState("");
+  const [dietaryNotes, setDietaryNotes] = useState("");
   const [songError, setSongError] = useState("");
-  
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
