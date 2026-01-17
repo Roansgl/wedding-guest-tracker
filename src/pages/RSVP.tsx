@@ -23,6 +23,7 @@ const RSVP = () => {
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [watermarkUrl, setWatermarkUrl] = useState<string | null>(null);
+  const [enableDietary, setEnableDietary] = useState(false);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
@@ -31,22 +32,25 @@ const RSVP = () => {
     if (code) {
       lookupGuest(code);
     }
-    fetchWatermark();
+    fetchWeddingSettings();
   }, [searchParams]);
 
-  const fetchWatermark = async () => {
+  const fetchWeddingSettings = async () => {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("wedding_settings")
-        .select("value")
-        .eq("key", "watermark_url")
-        .maybeSingle();
-      
-      if (data?.value) {
-        setWatermarkUrl(data.value);
-      }
+        .select("key, value")
+        .in("key", ["watermark_url", "enable_dietary"]);
+
+      if (error) throw error;
+
+      const watermark = data?.find((x) => x.key === "watermark_url")?.value ?? null;
+      const enableDietaryValue = data?.find((x) => x.key === "enable_dietary")?.value;
+
+      setWatermarkUrl(watermark);
+      setEnableDietary(enableDietaryValue === "true");
     } catch (error) {
-      console.error("Error fetching watermark:", error);
+      console.error("Error fetching wedding settings:", error);
     }
   };
 
@@ -218,7 +222,7 @@ const RSVP = () => {
                 </form>
               </div>
             ) : (
-              <RSVPForm guest={guest} onSuccess={handleRSVPSuccess} />
+              <RSVPForm guest={guest} onSuccess={handleRSVPSuccess} enableDietary={enableDietary} />
             )}
           </div>
         </div>

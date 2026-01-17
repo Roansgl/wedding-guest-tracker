@@ -56,6 +56,7 @@ interface WeddingInfo {
   accommodation_text: string;
   notes_text: string;
   weather_location: string;
+  enable_dietary: boolean;
 }
 
 const Admin = () => {
@@ -79,6 +80,7 @@ const Admin = () => {
     accommodation_text: "",
     notes_text: "",
     weather_location: "Kirkwood,Eastern Cape,ZA",
+    enable_dietary: false,
   });
   const [isSavingInfo, setIsSavingInfo] = useState(false);
 
@@ -113,7 +115,7 @@ const Admin = () => {
       const { data, error } = await supabase
         .from("wedding_settings")
         .select("key, value")
-        .in("key", ["directions_text", "directions_map_url", "accommodation_text", "notes_text", "weather_location"]);
+        .in("key", ["directions_text", "directions_map_url", "accommodation_text", "notes_text", "weather_location", "enable_dietary"]);
 
       if (error) throw error;
 
@@ -123,11 +125,31 @@ const Admin = () => {
         accommodation_text: "",
         notes_text: "",
         weather_location: "Kirkwood,Eastern Cape,ZA",
+        enable_dietary: false,
       };
 
       data?.forEach((item) => {
-        if (item.key in infoObj && item.value) {
-          infoObj[item.key as keyof WeddingInfo] = item.value;
+        switch (item.key) {
+          case "directions_text":
+            infoObj.directions_text = item.value ?? "";
+            break;
+          case "directions_map_url":
+            infoObj.directions_map_url = item.value ?? "";
+            break;
+          case "accommodation_text":
+            infoObj.accommodation_text = item.value ?? "";
+            break;
+          case "notes_text":
+            infoObj.notes_text = item.value ?? "";
+            break;
+          case "weather_location":
+            infoObj.weather_location = item.value ?? "Kirkwood,Eastern Cape,ZA";
+            break;
+          case "enable_dietary":
+            infoObj.enable_dietary = item.value === "true";
+            break;
+          default:
+            break;
         }
       });
 
@@ -140,7 +162,17 @@ const Admin = () => {
   const handleSaveWeddingInfo = async () => {
     setIsSavingInfo(true);
     try {
-      const updates = Object.entries(weddingInfo).map(async ([key, value]) => {
+      const keys = Object.keys(weddingInfo) as (keyof WeddingInfo)[];
+
+      const updates = keys.map(async (key) => {
+        const rawValue = weddingInfo[key];
+        const normalizedValue =
+          key === "enable_dietary"
+            ? rawValue
+              ? "true"
+              : "false"
+            : (rawValue as string).trim() || null;
+
         const { data: existing } = await supabase
           .from("wedding_settings")
           .select("id")
@@ -150,13 +182,17 @@ const Admin = () => {
         if (existing) {
           return supabase
             .from("wedding_settings")
-            .update({ value: value || null, updated_at: new Date().toISOString() })
+            .update({
+              value: normalizedValue,
+              updated_at: new Date().toISOString(),
+            })
             .eq("key", key);
-        } else {
-          return supabase
-            .from("wedding_settings")
-            .insert({ key, value: value || null });
         }
+
+        return supabase.from("wedding_settings").insert({
+          key,
+          value: normalizedValue,
+        });
       });
 
       await Promise.all(updates);
@@ -437,10 +473,30 @@ const Admin = () => {
               </div>
               <Textarea
                 value={weddingInfo.notes_text}
-                onChange={(e) => setWeddingInfo(prev => ({ ...prev, notes_text: e.target.value }))}
+                onChange={(e) =>
+                  setWeddingInfo((prev) => ({ ...prev, notes_text: e.target.value }))
+                }
                 placeholder="Voer notas vir gaste in..."
                 className="min-h-[100px]"
               />
+            </div>
+
+            {/* Dietary / Allergy field toggle */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <Label className="font-medium">Dieet / Allergieë vraag</Label>
+                  <p className="text-xs text-muted-foreground">
+                    Wys 'n opsionele dieet/allergieë veld op die RSVP vorm
+                  </p>
+                </div>
+                <Switch
+                  checked={weddingInfo.enable_dietary}
+                  onCheckedChange={(checked) =>
+                    setWeddingInfo((prev) => ({ ...prev, enable_dietary: checked }))
+                  }
+                />
+              </div>
             </div>
 
             {/* Weather Location */}
@@ -451,7 +507,12 @@ const Admin = () => {
               </div>
               <Input
                 value={weddingInfo.weather_location}
-                onChange={(e) => setWeddingInfo(prev => ({ ...prev, weather_location: e.target.value }))}
+                onChange={(e) =>
+                  setWeddingInfo((prev) => ({
+                    ...prev,
+                    weather_location: e.target.value,
+                  }))
+                }
                 placeholder="Stad, Provinsie, Land"
               />
               <p className="text-xs text-muted-foreground">Formaat: Kirkwood,Eastern Cape,ZA</p>
