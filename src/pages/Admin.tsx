@@ -357,7 +357,13 @@ const Admin = () => {
   };
 
   const copyInviteLink = (inviteCode: string) => {
-    const link = `${window.location.origin}/rsvp?code=${inviteCode}`;
+    const basePath = window.location.pathname.endsWith("/")
+      ? window.location.pathname
+      : `${window.location.pathname}/`;
+
+    // Always share a hash route so GitHub Pages deep links work reliably.
+    const link = `${window.location.origin}${basePath}#/rsvp?code=${inviteCode}`;
+
     navigator.clipboard.writeText(link);
     toast.success("Invite link copied!");
   };

@@ -6,7 +6,10 @@
     <script>
       // GitHub Pages SPA redirect
       // This script converts the path to a hash-based route
-      var pathSegmentsToKeep = 0;
+      // If this is a GitHub Project Page (user.github.io/repo/*) keep 1 segment (repo).
+      // If this is a GitHub User/Org Page (user.github.io/*) keep 0 segments.
+      var segments = l.pathname.split('/').filter(Boolean);
+      var pathSegmentsToKeep = (l.hostname.endsWith('github.io') && segments.length > 1) ? 1 : 0;
       var l = window.location;
       l.replace(
         l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
