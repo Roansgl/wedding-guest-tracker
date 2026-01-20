@@ -89,21 +89,49 @@ const Admin = () => {
   );
 
   useEffect(() => {
+    const checkAdminAccess = async (userId: string) => {
+      // Verify admin role
+      const { data: roles, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (error || !roles) {
+        toast.error('Ongemagtigde toegang');
+        await supabase.auth.signOut();
+        navigate('/admin/login');
+        return false;
+      }
+      return true;
+    };
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         if (!session?.user) {
           navigate("/admin/login");
+        } else if (event === 'SIGNED_IN') {
+          const isAdmin = await checkAdminAccess(session.user.id);
+          if (isAdmin) {
+            fetchGuests();
+            fetchWatermark();
+            fetchWeddingInfo();
+          }
         }
       }
     );
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!session?.user) {
         navigate("/admin/login");
       } else {
-        fetchGuests();
-        fetchWatermark();
-        fetchWeddingInfo();
+        const isAdmin = await checkAdminAccess(session.user.id);
+        if (isAdmin) {
+          fetchGuests();
+          fetchWatermark();
+          fetchWeddingInfo();
+        }
       }
     });
 
