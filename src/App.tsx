@@ -8,6 +8,7 @@ import RSVP from "./pages/RSVP";
 import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import Dankie from "./pages/Dankie";
 import { HashRouter, Routes, Route } from "react-router-dom";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/rsvp" element={<RSVP />} />
+          <Route path="/dankie" element={<Dankie />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
