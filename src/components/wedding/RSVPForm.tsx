@@ -139,6 +139,22 @@ export const RSVPForm = ({ guest, onSuccess, enableDietary }: RSVPFormProps) => 
             )}
           </div>
         )}
+
+        {status === "attending" && enableDietary && (
+          <div className="space-y-3 animate-fade-in">
+            <Label className="text-sm font-medium text-foreground">
+              Dieet Voorkeure / Allergieë
+            </Label>
+            <p className="text-xs text-muted-foreground">Laat weet ons van enige dieetvereistes of allergieë</p>
+            <Textarea
+              value={dietaryNotes}
+              onChange={(e) => setDietaryNotes(e.target.value.slice(0, 500))}
+              placeholder="Bv. vegetaries, geen neute, glutenvry..."
+              className="bg-card min-h-[80px]"
+              maxLength={500}
+            />
+          </div>
+        )}
       </div>
 
       <Button
