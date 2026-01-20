@@ -70,14 +70,13 @@ const AdminLogin = () => {
       });
       
       if (error) {
-        if (error.message.includes("Invalid login")) {
-          toast.error("Ongeldige e-pos of wagwoord. Probeer asseblief weer.");
-        } else {
-          throw error;
-        }
+        // Map all auth errors to generic message to prevent information disclosure
+        console.error('Login error:', error.message);
+        toast.error("Ongeldige e-pos of wagwoord. Probeer asseblief weer.");
       }
     } catch (error: any) {
-      toast.error(error.message || "'n Fout het voorgekom. Probeer asseblief weer.");
+      console.error('Unexpected login error:', error);
+      toast.error("'n Fout het voorgekom. Probeer asseblief weer.");
     } finally {
       setIsLoading(false);
     }

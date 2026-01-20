@@ -42,15 +42,20 @@ export const RSVPForm = ({ guest, onSuccess, enableDietary }: RSVPFormProps) => 
     setIsSubmitting(true);
     setSongError("");
 
+    // Input validation and sanitization
+    const sanitizedSongRequest = songRequest.trim().slice(0, 1000);
+    const sanitizedPlusOneName = plusOneName.trim().slice(0, 100);
+    const sanitizedDietaryNotes = dietaryNotes.trim().slice(0, 500);
+
     try {
       const { error } = await supabase
         .from("rsvps")
         .upsert({
           guest_id: guest.id,
           status,
-          dietary_notes: null,
-          plus_one_name: status === "attending" && guest.plus_one_allowed ? plusOneName : null,
-          message: songRequest,
+          dietary_notes: enableDietary && sanitizedDietaryNotes ? sanitizedDietaryNotes : null,
+          plus_one_name: status === "attending" && guest.plus_one_allowed ? sanitizedPlusOneName || null : null,
+          message: sanitizedSongRequest || null,
           responded_at: new Date().toISOString(),
         }, {
           onConflict: 'guest_id'
@@ -103,9 +108,10 @@ export const RSVPForm = ({ guest, onSuccess, enableDietary }: RSVPFormProps) => 
               <Label className="text-sm text-muted-foreground">Gas se Naam</Label>
               <Input
                 value={plusOneName}
-                onChange={(e) => setPlusOneName(e.target.value)}
+                onChange={(e) => setPlusOneName(e.target.value.slice(0, 100))}
                 placeholder="Gas se volle naam"
                 className="bg-card"
+                maxLength={100}
               />
             </div>
           </div>
@@ -120,11 +126,12 @@ export const RSVPForm = ({ guest, onSuccess, enableDietary }: RSVPFormProps) => 
             <Textarea
               value={songRequest}
               onChange={(e) => {
-                setSongRequest(e.target.value);
+                setSongRequest(e.target.value.slice(0, 1000));
                 if (songError) setSongError("");
               }}
               placeholder="Vertel ons watter liedjie u sal laat dans!"
               className={`bg-card min-h-[100px] ${songError ? 'border-destructive' : ''}`}
+              maxLength={1000}
               required
             />
             {songError && (
