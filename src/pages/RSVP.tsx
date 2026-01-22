@@ -25,6 +25,7 @@ const RSVP = () => {
   const [submitted, setSubmitted] = useState(false);
   const [watermarkUrl, setWatermarkUrl] = useState<string | null>(null);
   const [enableDietary, setEnableDietary] = useState(false);
+  const [weddingDate, setWeddingDate] = useState<string>("2026-08-01");
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
@@ -41,15 +42,17 @@ const RSVP = () => {
       const { data, error } = await supabase
         .from("wedding_settings")
         .select("key, value")
-        .in("key", ["watermark_url", "enable_dietary"]);
+        .in("key", ["watermark_url", "enable_dietary", "wedding_date"]);
 
       if (error) throw error;
 
       const watermark = data?.find((x) => x.key === "watermark_url")?.value ?? null;
       const enableDietaryValue = data?.find((x) => x.key === "enable_dietary")?.value;
+      const weddingDateValue = data?.find((x) => x.key === "wedding_date")?.value;
 
       setWatermarkUrl(watermark);
       setEnableDietary(enableDietaryValue === "true");
+      if (weddingDateValue) setWeddingDate(weddingDateValue);
     } catch (error) {
       console.error("Error fetching wedding settings:", error);
     }
@@ -156,7 +159,7 @@ const RSVP = () => {
           </button>
 
           {/* Countdown Timer */}
-          <WeddingCountdown />
+          <WeddingCountdown weddingDate={weddingDate} />
         </div>
       </section>
 
