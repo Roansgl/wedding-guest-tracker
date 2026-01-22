@@ -5,9 +5,10 @@ import { RSVPForm } from "@/components/wedding/RSVPForm";
 import { Ornament } from "@/components/wedding/Ornament";
 import { WeddingInfoDialog } from "@/components/wedding/WeddingInfoDialog";
 import { RSVPSuccessDialog } from "@/components/wedding/RSVPSuccessDialog";
+import { WeddingCountdown } from "@/components/wedding/WeddingCountdown";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Heart, MapPin, Calendar, Clock, AlertCircle } from "lucide-react";
+import { Heart, MapPin, Calendar, Clock, Info } from "lucide-react";
 
 interface Guest {
   id: string;
@@ -145,14 +146,17 @@ const RSVP = () => {
             RSVP asseblief teen 10 Februarie 2026
           </p>
 
-          {/* MOET LEES Link */}
+          {/* Belangrike Inligting Link */}
           <button
             onClick={() => setShowInfoDialog(true)}
             className="inline-flex items-center gap-2 mt-4 text-terracotta hover:text-terracotta/80 font-display text-lg underline underline-offset-4 decoration-2 transition-colors"
           >
-            <AlertCircle className="w-5 h-5" />
-            MOET LEES
+            <Info className="w-5 h-5" />
+            Belangrike Inligting
           </button>
+
+          {/* Countdown Timer */}
+          <WeddingCountdown />
         </div>
       </section>
 

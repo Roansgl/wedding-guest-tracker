@@ -22,7 +22,8 @@ import {
   MapPin,
   Home,
   FileText,
-  Cloud
+  Cloud,
+  Calendar
 } from "lucide-react";
 import {
   Table,
@@ -57,6 +58,7 @@ interface WeddingInfo {
   notes_text: string;
   weather_location: string;
   enable_dietary: boolean;
+  wedding_date: string;
 }
 
 const Admin = () => {
@@ -81,6 +83,7 @@ const Admin = () => {
     notes_text: "",
     weather_location: "Kirkwood,Eastern Cape,ZA",
     enable_dietary: false,
+    wedding_date: "2026-08-01",
   });
   const [isSavingInfo, setIsSavingInfo] = useState(false);
 
@@ -143,7 +146,7 @@ const Admin = () => {
       const { data, error } = await supabase
         .from("wedding_settings")
         .select("key, value")
-        .in("key", ["directions_text", "directions_map_url", "accommodation_text", "notes_text", "weather_location", "enable_dietary"]);
+        .in("key", ["directions_text", "directions_map_url", "accommodation_text", "notes_text", "weather_location", "enable_dietary", "wedding_date"]);
 
       if (error) throw error;
 
@@ -154,6 +157,7 @@ const Admin = () => {
         notes_text: "",
         weather_location: "Kirkwood,Eastern Cape,ZA",
         enable_dietary: false,
+        wedding_date: "2026-08-01",
       };
 
       data?.forEach((item) => {
@@ -175,6 +179,9 @@ const Admin = () => {
             break;
           case "enable_dietary":
             infoObj.enable_dietary = item.value === "true";
+            break;
+          case "wedding_date":
+            infoObj.wedding_date = item.value ?? "2026-08-01";
             break;
           default:
             break;
@@ -531,6 +538,25 @@ const Admin = () => {
                   }
                 />
               </div>
+            </div>
+
+            {/* Wedding Date */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-terracotta" />
+                <Label className="font-medium">Troue Datum</Label>
+              </div>
+              <Input
+                type="date"
+                value={weddingInfo.wedding_date}
+                onChange={(e) =>
+                  setWeddingInfo((prev) => ({
+                    ...prev,
+                    wedding_date: e.target.value,
+                  }))
+                }
+              />
+              <p className="text-xs text-muted-foreground">Hierdie datum word gebruik vir die aftelling op die RSVP bladsy</p>
             </div>
 
             {/* Weather Location */}
