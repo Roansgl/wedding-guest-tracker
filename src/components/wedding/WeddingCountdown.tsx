@@ -21,7 +21,7 @@ export const WeddingCountdown = () => {
 
     const calculateTimeLeft = () => {
       const now = new Date();
-      const target = new Date(weddingDate);
+      const target = weddingDate;
       
       if (target <= now) {
         setTimeLeft({ months: 0, days: 0, hours: 0 });
