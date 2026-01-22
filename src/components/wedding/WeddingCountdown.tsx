@@ -1,5 +1,12 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useMemo, useState } from "react";
+import {
+  addDays,
+  addMonths,
+  differenceInDays,
+  differenceInHours,
+  differenceInMonths,
+  isValid,
+} from "date-fns";
 
 interface TimeLeft {
   months: number;
@@ -7,72 +14,49 @@ interface TimeLeft {
   hours: number;
 }
 
-export const WeddingCountdown = () => {
-  const [weddingDate, setWeddingDate] = useState<Date | null>(null);
+interface WeddingCountdownProps {
+  weddingDate?: string | null;
+}
+
+export const WeddingCountdown = ({ weddingDate }: WeddingCountdownProps) => {
+  const targetDate = useMemo(() => {
+    // Prefer yyyy-mm-dd from settings; fallback to Aug 1, 2026
+    const raw = (weddingDate?.trim() || "2026-08-01").slice(0, 10);
+    // Ensure a stable parse across browsers by appending time
+    return new Date(`${raw}T00:00:00`);
+  }, [weddingDate]);
+
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ months: 0, days: 0, hours: 0 });
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchWeddingDate();
-  }, []);
-
-  useEffect(() => {
-    if (!weddingDate) return;
-
     const calculateTimeLeft = () => {
+      if (!isValid(targetDate)) {
+        setTimeLeft({ months: 0, days: 0, hours: 0 });
+        return;
+      }
+
       const now = new Date();
-      const target = weddingDate;
-      
+      const target = targetDate;
+
       if (target <= now) {
         setTimeLeft({ months: 0, days: 0, hours: 0 });
         return;
       }
 
-      const diffMs = target.getTime() - now.getTime();
-      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-      const diffDays = Math.floor(diffHours / 24);
-      
-      // Calculate months and remaining days
-      const months = Math.floor(diffDays / 30);
-      const days = diffDays % 30;
-      const hours = diffHours % 24;
+      // Calendar-accurate breakdown
+      const months = Math.max(0, differenceInMonths(target, now));
+      const afterMonths = addMonths(now, months);
+      const days = Math.max(0, differenceInDays(target, afterMonths));
+      const afterDays = addDays(afterMonths, days);
+      const hours = Math.max(0, differenceInHours(target, afterDays));
 
       setTimeLeft({ months, days, hours });
     };
 
     calculateTimeLeft();
-    const interval = setInterval(calculateTimeLeft, 1000 * 60); // Update every minute
-
+    const interval = setInterval(calculateTimeLeft, 1000 * 60); // update every minute
     return () => clearInterval(interval);
-  }, [weddingDate]);
-
-  const fetchWeddingDate = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("wedding_settings")
-        .select("value")
-        .eq("key", "wedding_date")
-        .maybeSingle();
-
-      if (error) throw error;
-
-      if (data?.value) {
-        setWeddingDate(new Date(data.value));
-      } else {
-        // Default to August 1, 2026 if not set
-        setWeddingDate(new Date("2026-08-01"));
-      }
-    } catch (error) {
-      console.error("Error fetching wedding date:", error);
-      setWeddingDate(new Date("2026-08-01"));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (isLoading) {
-    return null;
-  }
+  }, [targetDate]);
 
   return (
     <div className="flex justify-center gap-6 md:gap-8 py-4 animate-fade-in">
