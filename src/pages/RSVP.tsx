@@ -149,6 +149,9 @@ const RSVP = () => {
             RSVP asseblief teen 10 Februarie 2026
           </p>
 
+          {/* Countdown Timer - Always visible */}
+          <WeddingCountdown />
+
           {/* Belangrike Inligting Link */}
           <button
             onClick={() => setShowInfoDialog(true)}
@@ -157,9 +160,6 @@ const RSVP = () => {
             <Info className="w-5 h-5" />
             Belangrike Inligting
           </button>
-
-          {/* Countdown Timer */}
-          <WeddingCountdown weddingDate={weddingDate} />
         </div>
       </section>
 
