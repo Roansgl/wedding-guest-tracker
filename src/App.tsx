@@ -13,6 +13,24 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
+// Support direct links like /rsvp on static hosting by normalizing to HashRouter URLs.
+// Example: /rsvp?x=1  ->  /?x=1#/rsvp
+const ensureHashRoute = () => {
+  if (typeof window === "undefined") return;
+  const { pathname, search, hash } = window.location;
+
+  // Already a hash route
+  if (hash && hash.startsWith("#/")) return;
+
+  // Root is fine
+  if (pathname === "/" || pathname === "/index.html") return;
+
+  // Move the current pathname into the hash (keep query string at root)
+  window.history.replaceState(null, "", `/${search}#${pathname}`);
+};
+
+ensureHashRoute();
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
